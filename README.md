@@ -1,44 +1,41 @@
-```markdown
 # Comparação de Modelos de Aprendizado de Máquina para Classificação de Tipo e Qualidade de Pavimento Utilizando Dados de Sensores Veiculares
 
-Projeto desenvolvido para a disciplina de Redes Neurais, com foco em comparação de modelos de aprendizado de máquina clássicos e redes LSTM aplicados à classificação de **tipo de pavimento** e **qualidade da via** utilizando dados do conjunto Passive Vehicular Sensors (PVS). [memory:3][conversation_history:21][web:46]  
-
+Projeto desenvolvido para a disciplina de Redes Neurais, com foco em comparação de modelos de aprendizado de máquina clássicos e redes LSTM aplicados à classificação de **tipo de pavimento** e **qualidade da via** utilizando dados do conjunto Passive Vehicular Sensors (PVS).
 ---
 
 ## 💡 Visão geral
 
-Este repositório implementa uma arquitetura em dois estágios (cascata): [conversation_history:22][conversation_history:29]  
+Este repositório implementa uma arquitetura em dois estágios (cascata):
 
 1. **Estágio 1 – Tipo de pavimento**  
-   Classificação do tipo de pavimento (por exemplo, asfalto, paralelepípedo, terra) a partir de leituras de sensores embarcados em veículos. [conversation_history:21][conversation_history:28]  
+   Classificação do tipo de pavimento (por exemplo, asfalto, paralelepípedo, terra) a partir de leituras de sensores embarcados em veículos.
 
 2. **Estágio 2 – Qualidade da via**  
-   Classificação da qualidade da via (boa, regular, ruim) utilizando as mesmas features de sensores **mais** o tipo de pavimento **previsto** no estágio anterior como feature adicional. [conversation_history:22][conversation_history:31]  
+   Classificação da qualidade da via (boa, regular, ruim) utilizando as mesmas features de sensores **mais** o tipo de pavimento **previsto** no estágio anterior como feature adicional. 
 
-Modelos comparados: **Random Forest**, **Multi-Layer Perceptron (MLP)**, **Support Vector Machine (SVM)** e **Long Short-Term Memory (LSTM)** em ambas as tarefas. [conversation_history:21][conversation_history:37]  
-
+Modelos comparados: **Random Forest**, **Multi-Layer Perceptron (MLP)**, **Support Vector Machine (SVM)** e **Long Short-Term Memory (LSTM)** em ambas as tarefas. 
 ---
 
 ## 🎯 Objetivos
 
-- Classificar o tipo de pavimento usando dados de sensores veiculares do dataset PVS. [conversation_history:28][web:46]  
-- Classificar a qualidade da via em três níveis (boa, regular, ruim) a partir dos mesmos sinais de sensores. [conversation_history:20][conversation_history:21]  
-- Comparar o desempenho de RF, MLP, SVM e LSTM em cada tarefa, analisando acurácia, precisão, recall e F1-score. [conversation_history:21][conversation_history:31]  
-- Avaliar a contribuição da arquitetura em cascata, onde a predição do pavimento é utilizada como entrada adicional para o modelo de qualidade. [conversation_history:22][conversation_history:29]  
+- Classificar o tipo de pavimento usando dados de sensores veiculares do dataset PVS. 
+- Classificar a qualidade da via em três níveis (boa, regular, ruim) a partir dos mesmos sinais de sensores.
+- Comparar o desempenho de RF, MLP, SVM e LSTM em cada tarefa, analisando acurácia, precisão, recall e F1-score. 
+- Avaliar a contribuição da arquitetura em cascata, onde a predição do pavimento é utilizada como entrada adicional para o modelo de qualidade. 
 
 ---
 
 ## 📊 Conjunto de dados
 
-- **Fonte:** Passive Vehicular Sensors (PVS), disponibilizado publicamente (Kaggle), com dados de três veículos, três motoristas e nove cenários de condução. [conversation_history:28][web:46]  
-- **Atributos:** leituras de acelerômetros em diferentes posições/eixos, timestamp e rótulos de tipo de pavimento e indicadores de qualidade da via. [conversation_history:28][web:46]  
+- **Fonte:** Passive Vehicular Sensors (PVS), disponibilizado publicamente (Kaggle), com dados de três veículos, três motoristas e nove cenários de condução. 
+- **Atributos:** leituras de acelerômetros em diferentes posições/eixos, timestamp e rótulos de tipo de pavimento e indicadores de qualidade da via.
 
 ### Pré-processamento
 
-- Criação de `target_pavimento` (3 classes) a partir dos rótulos originais de pavimento. [conversation_history:24][conversation_history:37]  
-- Criação de `target_qualidade` (0 = boa, 1 = regular, 2 = ruim) a partir de colunas binárias `good_road_left`, `regular_road_left` e `bad_road_left`. [conversation_history:20][conversation_history:25]  
-- Escalonamento das features e divisão em conjuntos de treino, validação e teste (p.ex. 80/20). [conversation_history:24][conversation_history:31]  
-- Geração de janelas temporais (sequências) para os modelos LSTM. [conversation_history:16][conversation_history:31]  
+- Criação de `target_pavimento` (3 classes) a partir dos rótulos originais de pavimento. 
+- Criação de `target_qualidade` (0 = boa, 1 = regular, 2 = ruim) a partir de colunas binárias `good_road_left`, `regular_road_left` e `bad_road_left`. 
+- Escalonamento das features e divisão em conjuntos de treino, validação e teste (p.ex. 80/20). 
+- Geração de janelas temporais (sequências) para os modelos LSTM.
 
 ---
 
@@ -46,19 +43,19 @@ Modelos comparados: **Random Forest**, **Multi-Layer Perceptron (MLP)**, **Suppo
 
 - **Random Forest (RF)**  
   - Utilizado em pavimento e qualidade, com ajuste de número de árvores e profundidade.  
-  - Apresenta alta acurácia e bom equilíbrio entre desempenho e custo computacional. [conversation_history:21][conversation_history:31]  
+  - Apresenta alta acurácia e bom equilíbrio entre desempenho e custo computacional. 
 
 - **Multi-Layer Perceptron (MLP)**  
   - Rede neural feedforward com duas camadas ocultas.  
-  - Captura relações não lineares entre os sinais de sensores e os rótulos. [conversation_history:21][conversation_history:23]  
+  - Captura relações não lineares entre os sinais de sensores e os rótulos. 
 
 - **Support Vector Machine (SVM)**  
   - Utiliza kernel radial (RBF) para tratar fronteiras de decisão não lineares.  
-  - Obteve desempenho competitivo, especialmente na tarefa de tipo de pavimento. [conversation_history:21][conversation_history:22]  
+  - Obteve desempenho competitivo, especialmente na tarefa de tipo de pavimento. 
 
 - **Long Short-Term Memory (LSTM)**  
   - Rede recorrente aplicada a sequências temporais de sensores.  
-  - Projetada para explorar dependências temporais e melhorar a detecção de trechos em condição ruim. [conversation_history:21][conversation_history:31]  
+  - Projetada para explorar dependências temporais e melhorar a detecção de trechos em condição ruim. 
 
 ---
 
@@ -66,13 +63,13 @@ Modelos comparados: **Random Forest**, **Multi-Layer Perceptron (MLP)**, **Suppo
 
 1. **Estágio 1 – Pavimento**  
    - Entrada: features de sensores processadas.  
-   - Saída: rótulos previstos de tipo de pavimento para cada amostra, por modelo (RF, MLP, SVM, LSTM). [conversation_history:29][conversation_history:32]  
+   - Saída: rótulos previstos de tipo de pavimento para cada amostra, por modelo (RF, MLP, SVM, LSTM).
 
 2. **Estágio 2 – Qualidade da via**  
    - Entrada: mesmas features de sensores + coluna(s) de tipo de pavimento **previsto**.  
-   - Saída: qualidade da via (boa, regular, ruim). [conversation_history:22][conversation_history:31]  
+   - Saída: qualidade da via (boa, regular, ruim).  
 
-**Motivação:** a percepção de irregularidades depende do tipo de pavimento; incorporar a predição do pavimento na entrada ajuda o modelo de qualidade a capturar essa relação. [conversation_history:22][conversation_history:28]  
+**Motivação:** a percepção de irregularidades depende do tipo de pavimento; incorporar a predição do pavimento na entrada ajuda o modelo de qualidade a capturar essa relação.  
 
 ---
 
@@ -104,7 +101,7 @@ Modelos comparados: **Random Forest**, **Multi-Layer Perceptron (MLP)**, **Suppo
 └── README.md
 ```
 
-Estrutura inspirada em templates de projetos de ciência de dados e machine learning para facilitar reprodutibilidade e organização. [memory:10][web:52][web:59]  
+Estrutura inspirada em templates de projetos de ciência de dados e machine learning para facilitar reprodutibilidade e organização.
 
 ---
 
@@ -127,27 +124,24 @@ source .venv/bin/activate  # Linux/macOS
 pip install -r requirements.txt
 ```
 
-(As dependências incluem, por exemplo, `numpy`, `pandas`, `scikit-learn`, `tensorflow`/`keras`.) [memory:1][memory:15]  
+(As dependências incluem, por exemplo, `numpy`, `pandas`, `scikit-learn`, `tensorflow`/`keras`.)
 
 ### 3. Configurar caminhos de dados
 
-- Ajustar `DATAPATH` e `PROJECT_ROOT` no arquivo de configuração (por exemplo, `_1_config.py`) para apontar para a pasta onde o PVS está armazenado. [conversation_history:31][conversation_history:37]  
+- Ajustar `DATAPATH` e `PROJECT_ROOT` no arquivo de configuração (por exemplo, `_1_config.py`) para apontar para a pasta onde o PVS está armazenado. 
 
 ### 4. Rodar pipeline de pavimento
 
-- Executar os scripts da pasta `Pavimento/` na ordem definida (EDA → pré-processamento → split → treinamento dos modelos RF/MLP/SVM/LSTM). [conversation_history:24][conversation_history:37]  
+- Executar os scripts da pasta `Pavimento/` na ordem definida (EDA → pré-processamento → split → treinamento dos modelos RF/MLP/SVM/LSTM). 
 
 ### 5. Rodar pipeline de qualidade (cascata)
 
 - Executar os scripts da pasta `Qualidade/` que:  
   - criam `target_qualidade`,  
   - montam os datasets com pavimento previsto,  
-  - treinam e avaliam RF, MLP, SVM e LSTM para qualidade. [conversation_history:24][conversation_history:31]  
+  - treinam e avaliam RF, MLP, SVM e LSTM para qualidade. 
 
 ### 6. Analisar resultados
 
-- Consultar a pasta `results/` para ver as métricas comparativas (acurácia, F1, matrizes de confusão) usadas no artigo e na apresentação. [conversation_history:31][conversation_history:37]  
+- Consultar a pasta `results/` para ver as métricas comparativas (acurácia, F1, matrizes de confusão) usadas no artigo e na apresentação. 
 
-[18](https://github.com/topics/data-science-projects)
-[19](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
-[20](https://www.reddit.com/r/programming/comments/l0mgcy/github_readme_templates_creating_a_good_readme_is/)
