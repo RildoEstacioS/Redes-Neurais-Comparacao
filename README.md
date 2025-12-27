@@ -1,118 +1,153 @@
-Visão geral
-Este projeto compara diferentes modelos de aprendizado de máquina para classificar o tipo de pavimento (por exemplo, asfalto, paralelepípedo, terra) e a qualidade da via (boa, regular, ruim) usando dados de sensores instalados em veículos a partir do dataset Passive Vehicular Sensors (PVS).
-​
-O trabalho foi desenvolvido como projeto da disciplina de Redes Neurais, explorando modelos clássicos (Random Forest, MLP, SVM) e redes LSTM em uma arquitetura em dois estágios, onde a predição do tipo de pavimento é utilizada como entrada adicional para a classificação de qualidade.
-​
+```markdown
+# Comparação de Modelos de Aprendizado de Máquina para Classificação de Tipo e Qualidade de Pavimento Utilizando Dados de Sensores Veiculares
 
-Objetivos do projeto
-Classificar o tipo de pavimento a partir de leituras de sensores veiculares (acelerômetros, entre outros) do conjunto de dados PVS.
-​
+Projeto desenvolvido para a disciplina de Redes Neurais, com foco em comparação de modelos de aprendizado de máquina clássicos e redes LSTM aplicados à classificação de **tipo de pavimento** e **qualidade da via** utilizando dados do conjunto Passive Vehicular Sensors (PVS). [memory:3][conversation_history:21][web:46]  
 
-Classificar a qualidade da via em três níveis (boa, regular, ruim), considerando o desbalanceamento das classes e a importância da identificação correta de segmentos em condição ruim.
-​
+---
 
-Comparar o desempenho de Random Forest, Multi-Layer Perceptron, Support Vector Machine e Long Short-Term Memory em ambas as tarefas.
-​
+## 💡 Visão geral
 
-Avaliar uma arquitetura em cascata na qual a saída prevista do tipo de pavimento é usada como feature adicional para o modelo de qualidade.
-​
+Este repositório implementa uma arquitetura em dois estágios (cascata): [conversation_history:22][conversation_history:29]  
 
-Conjunto de dados
-Fonte: Passive Vehicular Sensors (PVS), disponibilizado publicamente (Kaggle), contendo leituras de sensores de três veículos, três motoristas e nove cenários de condução.
-​
+1. **Estágio 1 – Tipo de pavimento**  
+   Classificação do tipo de pavimento (por exemplo, asfalto, paralelepípedo, terra) a partir de leituras de sensores embarcados em veículos. [conversation_history:21][conversation_history:28]  
 
-Variáveis: sinais de aceleração em diferentes eixos/posições no veículo, timestamp e rótulos de tipo de pavimento e indicadores de qualidade de via.
-​
+2. **Estágio 2 – Qualidade da via**  
+   Classificação da qualidade da via (boa, regular, ruim) utilizando as mesmas features de sensores **mais** o tipo de pavimento **previsto** no estágio anterior como feature adicional. [conversation_history:22][conversation_history:31]  
 
-Pré-processamento:
+Modelos comparados: **Random Forest**, **Multi-Layer Perceptron (MLP)**, **Support Vector Machine (SVM)** e **Long Short-Term Memory (LSTM)** em ambas as tarefas. [conversation_history:21][conversation_history:37]  
 
-Criação de target_pavimento (3 classes) e target_qualidade (boa, regular, ruim) a partir de colunas binárias de qualidade.
-​
+---
 
-Normalização/escala dos atributos e divisão em conjuntos de treino, validação e teste.
-​
+## 🎯 Objetivos
 
-Preparação de janelas temporais de 20 passos para os modelos LSTM.
-​
+- Classificar o tipo de pavimento usando dados de sensores veiculares do dataset PVS. [conversation_history:28][web:46]  
+- Classificar a qualidade da via em três níveis (boa, regular, ruim) a partir dos mesmos sinais de sensores. [conversation_history:20][conversation_history:21]  
+- Comparar o desempenho de RF, MLP, SVM e LSTM em cada tarefa, analisando acurácia, precisão, recall e F1-score. [conversation_history:21][conversation_history:31]  
+- Avaliar a contribuição da arquitetura em cascata, onde a predição do pavimento é utilizada como entrada adicional para o modelo de qualidade. [conversation_history:22][conversation_history:29]  
 
-Modelos implementados
-Random Forest (RF): utilizado tanto para tipo de pavimento quanto para qualidade, explorando número de árvores e profundidade para obter alta acurácia com baixo custo computacional.
-​
+---
 
-Multi-Layer Perceptron (MLP): rede neural feedforward com duas camadas ocultas, ajustada para capturar relações não lineares entre as features de sensores e os rótulos de pavimento/qualidade.
-​
+## 📊 Conjunto de dados
 
-Support Vector Machine (SVM): usado com kernel radial (RBF) para separar as três classes em espaços não lineares, alcançando bom desempenho especialmente na tarefa de pavimento.
-​
+- **Fonte:** Passive Vehicular Sensors (PVS), disponibilizado publicamente (Kaggle), com dados de três veículos, três motoristas e nove cenários de condução. [conversation_history:28][web:46]  
+- **Atributos:** leituras de acelerômetros em diferentes posições/eixos, timestamp e rótulos de tipo de pavimento e indicadores de qualidade da via. [conversation_history:28][web:46]  
 
-Long Short-Term Memory (LSTM): rede recorrente aplicada às sequências temporais de sensores, explorando dependências temporais para melhorar a classificação, principalmente em qualidade da via.
-​
+### Pré-processamento
 
-Arquitetura em dois estágios (cascata)
-Estágio 1 – Tipo de pavimento:
+- Criação de `target_pavimento` (3 classes) a partir dos rótulos originais de pavimento. [conversation_history:24][conversation_history:37]  
+- Criação de `target_qualidade` (0 = boa, 1 = regular, 2 = ruim) a partir de colunas binárias `good_road_left`, `regular_road_left` e `bad_road_left`. [conversation_history:20][conversation_history:25]  
+- Escalonamento das features e divisão em conjuntos de treino, validação e teste (p.ex. 80/20). [conversation_history:24][conversation_history:31]  
+- Geração de janelas temporais (sequências) para os modelos LSTM. [conversation_history:16][conversation_history:31]  
 
-Entrada: features de sensores processadas.
+---
 
-Saída: rótulos previstos de tipo de pavimento para cada amostra (por modelo: RF, MLP, SVM, LSTM).
-​
+## 🤖 Modelos implementados
 
-Estágio 2 – Qualidade da via:
+- **Random Forest (RF)**  
+  - Utilizado em pavimento e qualidade, com ajuste de número de árvores e profundidade.  
+  - Apresenta alta acurácia e bom equilíbrio entre desempenho e custo computacional. [conversation_history:21][conversation_history:31]  
 
-Entrada: mesmas features de sensores + colunas adicionais com o tipo de pavimento previsto.
+- **Multi-Layer Perceptron (MLP)**  
+  - Rede neural feedforward com duas camadas ocultas.  
+  - Captura relações não lineares entre os sinais de sensores e os rótulos. [conversation_history:21][conversation_history:23]  
 
-Saída: qualidade da via (boa, regular, ruim).
-​
+- **Support Vector Machine (SVM)**  
+  - Utiliza kernel radial (RBF) para tratar fronteiras de decisão não lineares.  
+  - Obteve desempenho competitivo, especialmente na tarefa de tipo de pavimento. [conversation_history:21][conversation_history:22]  
 
-Justificativa: a qualidade percebida do pavimento depende do tipo de superfície, e utilizar a predição de pavimento como entrada ajuda o modelo de qualidade a capturar essa dependência conceitual.
-​
+- **Long Short-Term Memory (LSTM)**  
+  - Rede recorrente aplicada a sequências temporais de sensores.  
+  - Projetada para explorar dependências temporais e melhorar a detecção de trechos em condição ruim. [conversation_history:21][conversation_history:31]  
 
-Estrutura do repositório
-Sugestão alinhada com a organização já utilizada:
-​
+---
 
-Pavimento/
+## 🧱 Arquitetura em dois estágios (cascata)
 
-Scripts de EDA, pré-processamento, divisão de dados e treinamento dos modelos RF, MLP, SVM, LSTM para tipo de pavimento.
-​
+1. **Estágio 1 – Pavimento**  
+   - Entrada: features de sensores processadas.  
+   - Saída: rótulos previstos de tipo de pavimento para cada amostra, por modelo (RF, MLP, SVM, LSTM). [conversation_history:29][conversation_history:32]  
 
-Qualidade/
+2. **Estágio 2 – Qualidade da via**  
+   - Entrada: mesmas features de sensores + coluna(s) de tipo de pavimento **previsto**.  
+   - Saída: qualidade da via (boa, regular, ruim). [conversation_history:22][conversation_history:31]  
 
-Scripts de criação de target_qualidade, pré-processamento, montagem de datasets com pavimento previsto e treinamento dos modelos para qualidade da via.
-​
+**Motivação:** a percepção de irregularidades depende do tipo de pavimento; incorporar a predição do pavimento na entrada ajuda o modelo de qualidade a capturar essa relação. [conversation_history:22][conversation_history:28]  
 
-data/ ou archive/PVS 9/
+---
 
-Dados brutos do PVS e versões intermediárias/finais (*_pronto.csv, X_train*.csv, X_test*.csv).
-​
+## 📁 Estrutura do repositório (sugerida)
 
-results/
+```
+.
+├── Pavimento/           # Scripts e artefatos da tarefa de tipo de pavimento
+│   ├── data/            # Dados específicos (splits, features, etc.)
+│   ├── models/          # Pesos/modelos salvos (RF, MLP, SVM, LSTM)
+│   └── *.py             # EDA, pré-processamento, treinamento e avaliação
+│
+├── Qualidade/           # Scripts e artefatos da tarefa de qualidade
+│   ├── data/            # Dados específicos (splits, datasets com pavimento previsto)
+│   ├── models/          # Pesos/modelos salvos (RF, MLP, SVM, LSTM)
+│   └── *.py             # Criação de target_qualidade, cascata e treinamento
+│
+├── data/                # Dados brutos ou link para o PVS (se permitido)
+│   └── PVS_9/           # Arquivos originais ou organizados do dataset
+│
+├── results/             # Matrizes de confusão, métricas, tabelas e gráficos
+│
+├── article/             # Artigo em LaTeX baseado no template SBC
+│   └── *.tex
+│
+├── presentation/        # Slides da apresentação
+│   └── *.pptx
+│
+└── README.md
+```
 
-Matrizes de confusão, métricas (acurácia, precisão, recall, F1) e tabelas consolidadas usadas no artigo e na apresentação.
-​
+Estrutura inspirada em templates de projetos de ciência de dados e machine learning para facilitar reprodutibilidade e organização. [memory:10][web:52][web:59]  
 
-article/
+---
 
-Arquivo LaTeX baseado no template SBC com o artigo completo do projeto.
-​
+## 🚀 Como executar
 
-presentation/
+### 1. Clonar o repositório
 
-Slides da apresentação de 10 minutos com roteiro sobre problema, metodologia, resultados e aplicações.
-​
+```
+git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+cd SEU_REPOSITORIO
+```
 
-Como executar
-Configurar o ambiente Python (versão 3.10) com as dependências de ciência de dados e deep learning (por exemplo, NumPy, pandas, scikit-learn, TensorFlow/Keras).
+### 2. Criar ambiente e instalar dependências
 
-Definir o caminho para o dataset PVS nas variáveis de configuração (DATAPATH, PROJECT_ROOT) no arquivo de configuração do projeto.
-​
+```
+python -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
 
-Executar os scripts da pasta Pavimento/ para gerar modelos treinados e predições de tipo de pavimento.
-​
+pip install -r requirements.txt
+```
 
-Executar os scripts da pasta Qualidade/ para montar os datasets com pavimento previsto e treinar os modelos de qualidade.
-​
+(As dependências incluem, por exemplo, `numpy`, `pandas`, `scikit-learn`, `tensorflow`/`keras`.) [memory:1][memory:15]  
 
-Consultar os arquivos em results/ para analisar as métricas comparativas entre os modelos em cada tarefa.
-​
+### 3. Configurar caminhos de dados
 
-Se quiser, na próxima mensagem dá para adaptar esse README para o formato exato do seu GitHub (por exemplo, acrescentando comandos python arquivo.py específicos de cada script).
+- Ajustar `DATAPATH` e `PROJECT_ROOT` no arquivo de configuração (por exemplo, `_1_config.py`) para apontar para a pasta onde o PVS está armazenado. [conversation_history:31][conversation_history:37]  
+
+### 4. Rodar pipeline de pavimento
+
+- Executar os scripts da pasta `Pavimento/` na ordem definida (EDA → pré-processamento → split → treinamento dos modelos RF/MLP/SVM/LSTM). [conversation_history:24][conversation_history:37]  
+
+### 5. Rodar pipeline de qualidade (cascata)
+
+- Executar os scripts da pasta `Qualidade/` que:  
+  - criam `target_qualidade`,  
+  - montam os datasets com pavimento previsto,  
+  - treinam e avaliam RF, MLP, SVM e LSTM para qualidade. [conversation_history:24][conversation_history:31]  
+
+### 6. Analisar resultados
+
+- Consultar a pasta `results/` para ver as métricas comparativas (acurácia, F1, matrizes de confusão) usadas no artigo e na apresentação. [conversation_history:31][conversation_history:37]  
+
+[18](https://github.com/topics/data-science-projects)
+[19](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
+[20](https://www.reddit.com/r/programming/comments/l0mgcy/github_readme_templates_creating_a_good_readme_is/)
